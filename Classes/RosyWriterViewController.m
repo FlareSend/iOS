@@ -66,7 +66,7 @@
 @property(nonatomic, retain) NSTimer *labelTimer;
 @property(nonatomic, retain) OpenGLPixelBufferView *previewView;
 @property(nonatomic, retain) RosyWriterCapturePipeline *capturePipeline;
-
+@property(nonatomic, retain) UIView * transmitter;
 @end
 
 @implementation RosyWriterViewController
@@ -74,7 +74,7 @@
 
 - (void)dealloc
 {
-	if ( _addedObservers ) {
+	if (_addedObservers) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:[UIDevice currentDevice]];
@@ -144,6 +144,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+//    self.transmitter = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    [self.view addSubview:self.transmitter];
+//    [self.view bringSubviewToFront:self.transmitter];
+//    [self.transmitter setBackgroundColor:[UIColor colorWithRed:.4 green:.5 blue:.1 alpha:1]];
+
     [[self recordButton] setTitle:@"Begin capture"];
 	
 	[self.capturePipeline startRunning];
@@ -185,7 +190,6 @@
     }
     else
 	{
-        
 		// Disable the idle timer while recording
 		[UIApplication sharedApplication].idleTimerDisabled = YES;
 		

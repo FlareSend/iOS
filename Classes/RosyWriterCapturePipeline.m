@@ -638,22 +638,35 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 			CVPixelBufferRef sourcePixelBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
 			renderedPixelBuffer = [_renderer copyRenderedPixelBuffer:sourcePixelBuffer];
             if ( _renderer.detectionDone != nil && _renderer.detectionDone != NULL) {
-                NSLog(@"Showing alert %@", _renderer.detectionDone );
+//                NSLog(@"Showing alert %@", _renderer.detectionDone );
                 if (![_renderer.detectionDone isEqualToString:@"!___err___!"]) {
-                    NSLog(@"dispatching");
+//                    NSLog(@"dispatching");
                     _renderer.cachedString = _renderer.detectionDone;
                     _renderer.detectionDone = nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [centralViewController recordingStopped];
-                        NSLog(@"Showing alert");
                         if ([self validateUrl:_renderer.cachedString]) {
                             NSURL * url = [NSURL URLWithString:_renderer.cachedString];
                             [[UIApplication sharedApplication] openURL:url];
                         } else {
-                            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Transmitted Message" message:[NSString stringWithFormat:@"%@", _renderer.cachedString] delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
+//                            NSString * strToShow;
+//                            UIImageView *imageView = nil;
+//                            if ([_renderer.cachedString rangeOfString:@"data:image/png;base64,"].location == 0) {
+//                                strToShow = @"";
+//                                imageView = [[UIImageView alloc] initWithFrame:CGRectMake(180, 10, 85, 50)];
+//                                NSURL *url = [NSURL URLWithString:base64String];
+//                                NSData *imageData = [NSData dataWithContentsOfURL:url];
+//                                UIImage *ret = [UIImage imageWithData:imageData];
+//                                UIImage *wonImage = [UIImage imageNamed:@"image.png"];
+//                                [imageView setImage:wonImage];
+                                
+//                            } else {
+                                NSString * strToShow = _renderer.cachedString;
+//                            }
+                            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Transmitted Message" message:strToShow delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
                             [alert show];
                             [alert release];
-                            NSLog(@"Done showing alert");
+//                            NSLog(@"Done showing alert");
                         }
                     });
                 } else {

@@ -182,7 +182,7 @@ int addToRecordedColors(int r, int g, int b) {
         }
     }
 
-    NSLog(@"starting position: %i", startPosition);
+//    NSLog(@"starting position: %i", startPosition);
     
     for (int i= startPosition; i<numIndexes;i+=6){
         if (recordedColors[i] + recordedColors[i + 1] + recordedColors[i + 2] == 0) {
@@ -219,7 +219,7 @@ int addToRecordedColors(int r, int g, int b) {
 
     
     NSLog(@"DECODE: %@", decodedString); // foo
-    if (![decodedString isEqualToString:@""]) {
+    if (![decodedString isEqualToString:@""] || decodedString == nil || decodedString == NULL) {
         self.detectionDone = [NSString stringWithFormat:@"%@", decodedString];
     } else {
         self.detectionDone = @"!___err___!";
