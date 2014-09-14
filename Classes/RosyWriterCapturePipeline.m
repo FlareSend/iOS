@@ -617,10 +617,9 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 }
 
 - (BOOL) validateUrl: (NSString *) candidate {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-    return [urlTest evaluateWithObject:candidate];
+    candidate = [candidate stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSURL * url = [NSURL URLWithString:candidate];
+    return url != nil;
 }
 
 - (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer
@@ -641,7 +640,6 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 //                NSLog(@"Showing alert %@", _renderer.detectionDone );
                 if (![_renderer.detectionDone isEqualToString:@"!___err___!"]) {
 //                    NSLog(@"dispatching");
-                    _renderer.cachedString = _renderer.detectionDone;
                     _renderer.detectionDone = nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [centralViewController recordingStopped];
@@ -661,7 +659,8 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 //                                [imageView setImage:wonImage];
                                 
 //                            } else {
-                                NSString * strToShow = _renderer.cachedString;
+                            
+                            NSString * strToShow = _renderer.cachedString;
 //                            }
                             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Transmitted Message" message:strToShow delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
                             [alert show];
@@ -709,7 +708,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
     [_renderer setState:1];
     return;
     
-	@synchronized( self )
+	@synchronized(self)
 	{
 		if ( _recordingStatus != RosyWriterRecordingStatusIdle ) {
 			@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Already recording" userInfo:nil];
@@ -740,6 +739,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 - (void)stopRecording
 {
     [_renderer setState:0];
+    _renderer.detectionDone = @"!___err___!";
     return;
 	@synchronized( self )
 	{

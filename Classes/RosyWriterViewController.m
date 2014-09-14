@@ -222,7 +222,7 @@
     [self.transmitter addSubview:self.mainMenuBtn];
     //
     
-    self.mainMenuRecvrBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - width/2, [UIScreen mainScreen].bounds.size.height - 45, width, 30)];
+    self.mainMenuRecvrBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - width/2, 15, width, 30)];
     self.mainMenuRecvrBtn.layer.cornerRadius = 4;
     self.mainMenuRecvrBtn.layer.borderColor = [[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0] CGColor];
     self.mainMenuRecvrBtn.layer.borderWidth = 1;
@@ -459,6 +459,7 @@
     if ( _recording )
 	{
         [self.capturePipeline stopRecording];
+        [[self recordButton] setTitle:@"Begin capture"];
     }
     else
 	{

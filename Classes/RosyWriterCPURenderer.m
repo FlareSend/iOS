@@ -77,7 +77,7 @@ int recordState = 0;
     if (n == 1) {
         [self reset];
     } else if (n == 0) {
-        //[centralViewController recordingStopped];
+        
     }
 
     recordState = n;
@@ -97,64 +97,40 @@ int modVal(val, up) {
     }
 }
 
-
+//best in class function:
 int addToRecordedColors(int r, int g, int b) {
+    NSLog(@"%i", b);
     int cr = defineBit(r);
     int cg = defineBit(g);
     int cb = defineBit(b);
+    BOOL isNotIdenticle = !(recordedColors[numIndexes - 3] == cr && recordedColors[numIndexes - 2] == cg && recordedColors[numIndexes - 1] == cb);
+    if (numIndexes > 6 && !isNotIdenticle) {
+        same += 1;
+        if (same > 10) {
+            same = 0;
+            return -99;
+        }
+    } else {
+        same = 0;
+    }
+
     if (cr < 0 || cg < 0 || cb < 0) return -1;
     if (cr *cg*cb == 0 && cr+cg+cb>0) return -1;
 //    NSLog(@"%i", abs(r * r + g * g + b * b - (lastR * lastR + lastG * lastG + lastB * lastB)));
-
-    if ((cb - lastNormB + cr - lastNormR + cg - lastNormB == 0) && lastR > 0) {
-        if (abs(r * r + g * g + b * b - (lastR * lastR + lastG * lastG + lastB * lastB)) > 200000) {
-            int diffR = abs(r - lastR);
-            int diffG = abs(g - lastG);
-            int diffB = abs(b - lastB);
-            
-            if (diffR > diffG && diffR > diffB) {
-                // r is biggest
-                if (r - lastR > 0) {
-                    cr = modVal(cr, 1);
-                } else {
-                    cr = modVal(cr, 0);
-                }
-            } else if (diffG > diffR && diffG > diffB) {
-                if (g - lastG > 0) {
-                    cg = modVal(cg, 1);
-                } else {
-                    cg = modVal(cg, 0);
-                }
-                // g is biggest
-            } else {
-                if (b - lastB > 0) {
-                    cb = modVal(cb, 1);
-                } else {
-                    cb = modVal(cb, 0);
-                }
-            }
-        }
-    }
     
     lastR = r;
     lastG = g;
     lastB = b;
     
     if (numIndexes == -1) return (numIndexes = numIndexes + 1);
-    BOOL isNotIdenticle = !(recordedColors[numIndexes - 3] == cr && recordedColors[numIndexes - 2] == cg && recordedColors[numIndexes - 1] == cb);
+   
+
     if ((numIndexes == 0 || isNotIdenticle) && ((lastNormR == cr && lastNormG == cg && lastNormB == cb) || lastNormG == -2)) {
-        same = 0;
         numIndexes += 3;
         recordedColors = realloc(recordedColors, numIndexes * sizeof(int));
         recordedColors[numIndexes - 3] = cr;
         recordedColors[numIndexes - 2] = cg;
         recordedColors[numIndexes - 1] = cb;
-    } else if (!isNotIdenticle && numIndexes > 6){
-        same += 1;
-        if (same > 60) {
-            same = 0;
-            return -99;
-        }
     }
     
     lastNormR = cr;
@@ -217,13 +193,15 @@ int addToRecordedColors(int r, int g, int b) {
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:b64 options:0];
     NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
 
-    
+ 
     NSLog(@"DECODE: %@", decodedString); // foo
-    if (![decodedString isEqualToString:@""] || decodedString == nil || decodedString == NULL) {
-        self.detectionDone = [NSString stringWithFormat:@"%@", decodedString];
-    } else {
-        self.detectionDone = @"!___err___!";
-    }
+//    if (![decodedString isEqualToString:@""] || decodedString == nil || decodedString == NULL) {
+//        self.detectionDone = [NSString stringWithFormat:@"%@", decodedString];
+//    } else {
+//        self.detectionDone = @"!___err___!";
+//    }
+    self.detectionDone = decodedString;
+    self.cachedString = decodedString;
     
     //[centralViewController recordingStopped];
 }
@@ -287,10 +265,10 @@ int addToRecordedColors(int r, int g, int b) {
         for ( int column = 0; column < bufferWidth; column++) {
       
     //            if (abs(row - bufferHeight/2) < rect_space && abs(column - bufferWidth/2) < rect_space) {
-                blueAvg += pixel[0]; // De-green (second pixel in BGRA is green)
-                greenAvg += pixel[1]; // De-green (second pixel in BGRA is green)
-                redAvg += pixel[2]; // De-green (second pixel in BGRA is green)
-                ct++;
+            blueAvg += pixel[0]; // De-green (second pixel in BGRA is green)
+            greenAvg += pixel[1]; // De-green (second pixel in BGRA is green)
+            redAvg += pixel[2]; // De-green (second pixel in BGRA is green)
+            ct++;
     //            }
             
             pixel += kBytesPerPixel;
