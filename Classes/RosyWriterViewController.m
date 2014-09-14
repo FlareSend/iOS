@@ -71,6 +71,7 @@
 
 @implementation RosyWriterViewController
 
+
 - (void)dealloc
 {
 	if ( _addedObservers ) {
@@ -143,10 +144,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+    [[self recordButton] setTitle:@"Begin capture"];
 	
 	[self.capturePipeline startRunning];
 	
 	self.labelTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateLabels) userInfo:nil repeats:YES];
+}
+
+- (void) buttonClicked:(id) btn {
+    NSLog(@"!!!");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -187,7 +193,7 @@
 			_backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{}];
 		
 		[[self recordButton] setEnabled:NO]; // re-enabled once recording has finished starting
-		[[self recordButton] setTitle:@"Stop"];
+		[[self recordButton] setTitle:@"End capture"];
 		
 		[self.capturePipeline startRecording];
 		
@@ -199,7 +205,7 @@
 {
 	_recording = NO;
 	[[self recordButton] setEnabled:YES];
-	[[self recordButton] setTitle:@"Record"];
+	[[self recordButton] setTitle:@"Begin capture"];
 	
 	[UIApplication sharedApplication].idleTimerDisabled = NO;
 	
@@ -293,7 +299,7 @@
 {
 	// Disable record button until we are ready to start another recording
 	[[self recordButton] setEnabled:NO];
-	[[self recordButton] setTitle:@"Record"];
+	[[self recordButton] setTitle:@"Begin capture"];
 }
 
 - (void)capturePipelineRecordingDidStop:(RosyWriterCapturePipeline *)capturePipeline

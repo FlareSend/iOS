@@ -53,4 +53,5 @@
 int addToRecordedColors(int r, int g, int b);
 int defineBit(int n);
 int modVal(int val, int up);
+- (void) setState:(int) n;
 @end

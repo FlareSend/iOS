@@ -101,7 +101,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 	dispatch_queue_t _sessionQueue;
 	dispatch_queue_t _videoDataOutputQueue;
 	
-	id<RosyWriterRenderer> _renderer;
+	id <RosyWriterRenderer> _renderer;
 	BOOL _renderingEnabled;
 	
 	NSURL *_recordingURL;
@@ -124,8 +124,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 @implementation RosyWriterCapturePipeline
 
-- (id)init
-{
+- (id) init {
 	self = [super init];
 	if ( self )
 	{
@@ -224,6 +223,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 - (void)stopRunning
 {
+    
 	dispatch_sync( _sessionQueue, ^{
 		_running = NO;
 		
@@ -235,6 +235,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 		[self captureSessionDidStopRunning];
 		
 		[self teardownCaptureSession];
+        [_renderer setState:0];
 	} );
 }
 
@@ -365,6 +366,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 - (void)captureSessionNotification:(NSNotification *)notification
 {
+    
 	dispatch_async( _sessionQueue, ^{
 		
 		if ( [[notification name] isEqualToString:AVCaptureSessionWasInterruptedNotification] )
@@ -654,6 +656,9 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 - (void)startRecording
 {
+    [_renderer setState:1];
+    return;
+    
 	@synchronized( self )
 	{
 		if ( _recordingStatus != RosyWriterRecordingStatusIdle ) {
@@ -684,6 +689,8 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 - (void)stopRecording
 {
+    [_renderer setState:0];
+    return;
 	@synchronized( self )
 	{
 		if ( _recordingStatus != RosyWriterRecordingStatusRecording ) {
@@ -802,7 +809,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 #if LOG_STATUS_TRANSITIONS
 
-- (NSString *)stringForRecordingStatus:(RosyWriterRecordingStatus)status
+- (NSString *) stringForRecordingStatus:(RosyWriterRecordingStatus)status
 {
 	NSString *statusString = nil;
 	

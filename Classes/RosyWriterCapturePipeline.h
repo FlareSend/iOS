@@ -90,5 +90,4 @@
 - (void)capturePipeline:(RosyWriterCapturePipeline *)capturePipeline recordingDidFailWithError:(NSError *)error; // Can happen at any point after a startRecording call, for example: startRecording->didFail (without a didStart), willStop->didFail (without a didStop)
 - (void)capturePipelineRecordingWillStop:(RosyWriterCapturePipeline *)capturePipeline;
 - (void)capturePipelineRecordingDidStop:(RosyWriterCapturePipeline *)capturePipeline;
-
 @end

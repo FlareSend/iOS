@@ -74,6 +74,8 @@
 
 @optional
 
+- (void) setState: (int) n;
+
 // This property must be implemented if operatesInPlace is NO and the output pixel buffers have a different format description than the input.
 // If implemented a non-NULL value must be returned once the renderer has been prepared (can be NULL after being reset).
 @property(nonatomic, readonly) CMFormatDescriptionRef __attribute__((NSObject)) outputFormatDescription;
