@@ -113,7 +113,7 @@
 
 - (void)viewDidLoad
 {
-    self.capturePipeline = [[[RosyWriterCapturePipeline alloc] init] autorelease];
+    self.capturePipeline = [[[RosyWriterCapturePipeline alloc] initWithViewController:self] autorelease];
     [self.capturePipeline setDelegate:self callbackQueue:dispatch_get_main_queue()];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -185,14 +185,15 @@
     }
     else
 	{
+        
 		// Disable the idle timer while recording
 		[UIApplication sharedApplication].idleTimerDisabled = YES;
 		
 		// Make sure we have time to finish saving the movie if the app is backgrounded during recording
-		if ( [[UIDevice currentDevice] isMultitaskingSupported] )
-			_backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{}];
+//		if ( [[UIDevice currentDevice] isMultitaskingSupported] )
+//			_backgroundRecordingID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{}];
 		
-		[[self recordButton] setEnabled:NO]; // re-enabled once recording has finished starting
+//		[[self recordButton] setEnabled:NO]; // re-enabled once recording has finished starting
 		[[self recordButton] setTitle:@"End capture"];
 		
 		[self.capturePipeline startRecording];
@@ -201,16 +202,15 @@
 	}
 }
 
-- (void)recordingStopped
-{
+- (void) recordingStopped {
+    
 	_recording = NO;
 	[[self recordButton] setEnabled:YES];
 	[[self recordButton] setTitle:@"Begin capture"];
-	
 	[UIApplication sharedApplication].idleTimerDisabled = NO;
 	
-	[[UIApplication sharedApplication] endBackgroundTask:_backgroundRecordingID];
-	_backgroundRecordingID = UIBackgroundTaskInvalid;
+//	[[UIApplication sharedApplication] endBackgroundTask:_backgroundRecordingID];
+//	_backgroundRecordingID = UIBackgroundTaskInvalid;
 }
 
 - (void)setupPreviewView

@@ -48,7 +48,7 @@
 
 #import "RosyWriterCapturePipeline.h"
 #import "RosyWriterCPURenderer.h"
-
+#import "RosyWriterViewController.h"
 #import "MovieRecorder.h"
 
 #import <CoreMedia/CMBufferQueue.h>
@@ -122,12 +122,15 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 
 @end
 
-@implementation RosyWriterCapturePipeline
+@implementation RosyWriterCapturePipeline {
+    RosyWriterViewController * centralViewController;
+}
 
-- (id) init {
+- (id) initWithViewController:(RosyWriterViewController *) vc {
 	self = [super init];
 	if ( self )
 	{
+        centralViewController = vc;
 		_previousSecondTimestamps = [[NSMutableArray alloc] init];
 		_recordingOrientation = (AVCaptureVideoOrientation)UIDeviceOrientationPortrait;
 		
@@ -143,7 +146,7 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 		dispatch_set_target_queue( _videoDataOutputQueue, dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ) );
 		
 
-		_renderer = [[RosyWriterCPURenderer alloc] init];
+		_renderer = [[RosyWriterCPURenderer alloc] initWithViewController:centralViewController];
 
 		_pipelineRunningTask = UIBackgroundTaskInvalid;
 	}
@@ -627,6 +630,16 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 		if ( _renderingEnabled ) {
 			CVPixelBufferRef sourcePixelBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
 			renderedPixelBuffer = [_renderer copyRenderedPixelBuffer:sourcePixelBuffer];
+            if ( _renderer.detectionDone != nil ) {
+                if (![_renderer.detectionDone isEqualToString:@"!___err___!"]) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messsage" message:[NSString stringWithFormat:@"%@", _renderer.detectionDone] delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
+                    [alert show];
+                    [alert release];
+                }
+
+                [self stopRecording];
+                _renderer.detectionDone = nil;
+            }
 		}
 		else {
 			return;

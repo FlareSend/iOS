@@ -80,4 +80,6 @@
 // If implemented a non-NULL value must be returned once the renderer has been prepared (can be NULL after being reset).
 @property(nonatomic, readonly) CMFormatDescriptionRef __attribute__((NSObject)) outputFormatDescription;
 
+@property(nonatomic, retain) NSString* detectionDone;
+
 @end

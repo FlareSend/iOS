@@ -50,5 +50,5 @@
 #import <UIKit/UIKit.h>
 
 @interface RosyWriterViewController : UIViewController
-
+- (void)recordingStopped;
 @end

@@ -48,10 +48,12 @@
 
 
 #import "RosyWriterRenderer.h"
-
+#import "RosyWriterViewController.h"
 @interface RosyWriterCPURenderer : NSObject <RosyWriterRenderer>
+@property(nonatomic, retain) NSString * detectionDone;
 int addToRecordedColors(int r, int g, int b);
 int defineBit(int n);
 int modVal(int val, int up);
 - (void) setState:(int) n;
+- (id) initWithViewController:(RosyWriterViewController *) vc;
 @end

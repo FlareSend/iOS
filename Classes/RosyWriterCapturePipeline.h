@@ -48,10 +48,13 @@
 
 
 #import <AVFoundation/AVFoundation.h>
+#import "RosyWriterViewController.h"
 
 @protocol RosyWriterCapturePipelineDelegate;
 
-@interface RosyWriterCapturePipeline : NSObject 
+@interface RosyWriterCapturePipeline : NSObject
+
+- (id) initWithViewController:(RosyWriterViewController *) vc;
 
 - (void)setDelegate:(id<RosyWriterCapturePipelineDelegate>)delegate callbackQueue:(dispatch_queue_t)delegateCallbackQueue; // delegate is weak referenced
 
