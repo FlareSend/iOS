@@ -52,4 +52,5 @@
 @interface RosyWriterCPURenderer : NSObject <RosyWriterRenderer>
 int addToRecordedColors(int r, int g, int b);
 int defineBit(int n);
+int modVal(int val, int up);
 @end

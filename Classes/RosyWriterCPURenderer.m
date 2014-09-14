@@ -51,6 +51,12 @@
 int *recordedColors;
 int numIndexes = -1;
 int same = 0;
+int lastR = -2;
+int lastG = - 2;
+int lastB = -2;
+int lastNormR = -2;
+int lastNormG = -2;
+int lastNormB = -2;
 
 @implementation RosyWriterCPURenderer {
     @private
@@ -69,9 +75,17 @@ int same = 0;
 }
 
 int defineBit(int n) {
-    if (n < 20) return 0;
+    if (n < 10) return 0;
     if (n < 197) return 138;
     return 255;
+}
+
+int modVal(val, up) {
+    if (up == 1){
+        return 255;
+    } else {
+        return 138;
+    }
 }
 
 
@@ -81,9 +95,68 @@ int addToRecordedColors(int r, int g, int b) {
     int cg = defineBit(g);
     int cb = defineBit(b);
     if (cr < 0 || cg < 0 || cb < 0) return -1;
+    if (cr *cg*cb == 0 && cr+cg+cb>0) return -1;
+//    NSLog(@"%i", abs(r * r + g * g + b * b - (lastR * lastR + lastG * lastG + lastB * lastB)));
+
+    if ((cb - lastNormB + cr - lastNormR + cg - lastNormB == 0) && lastR > 0) {
+        if (abs(r * r + g * g + b * b - (lastR * lastR + lastG * lastG + lastB * lastB)) > 200000) {
+//            NSLog(@"!! %i, %i, %i", cr, cg, cb);
+//            NSLog(@"%i", abs(r * r + g * g + b * b - (lastR * lastR + lastG * lastG + lastB * lastB)));
+            int diffR = abs(r - lastR);
+            int diffG = abs(g - lastG);
+            int diffB = abs(b - lastB);
+            
+            if (diffR > diffG && diffR > diffB) {
+                // r is biggest
+                if (r - lastR > 0) {
+                    cr = modVal(cr, 1);
+                } else {
+                    cr = modVal(cr, 0);
+                }
+            } else if (diffG > diffR && diffG > diffB) {
+                if (g - lastG > 0) {
+                    cg = modVal(cg, 1);
+                } else {
+                    cg = modVal(cg, 0);
+                }
+                // g is biggest
+            } else {
+                if (b - lastB > 0) {
+                    cb = modVal(cb, 1);
+                } else {
+                    cb = modVal(cb, 0);
+                }
+            }
+        }
+//        if (abs(r - lastR) > 50) {
+//            cr = modVal(lastNormR, 1);
+//        } else {
+//            cr = modVal(lastNormR, 0);
+//        }
+//        
+//        if (abs(g - lastG) > 50) {
+//            cg = modVal(lastNormG, 1);
+//        } else {
+//            cg = modVal(lastNormG, 0);
+//        }
+//        
+//        if (abs(b - lastB) > 50) {
+//            cb = modVal(lastNormB, 1);
+//        } else {
+//            cb = modVal(lastNormB, 0);
+//        }
+    }
+    
+    lastR = r;
+    lastG = g;
+    lastB = b;
+    
+//    int magnitude = r * r + g * g + b * b;
+
     BOOL isNotIdenticle = !(recordedColors[numIndexes - 3] == cr && recordedColors[numIndexes - 2] == cg && recordedColors[numIndexes - 1] == cb);
     if (numIndexes == -1) return (numIndexes = numIndexes + 1);
-    if (numIndexes == 0 || isNotIdenticle) {
+    
+    if ((numIndexes == 0 || isNotIdenticle) && ((lastNormR == cr && lastNormG == cg && lastNormB == cb) || lastNormG == -2)) {
         same = 0;
         NSLog(@"%i, %i, %i", r, g, b);
         NSLog(@">>> %i, %i, %i", cr, cg, cb);
@@ -99,58 +172,70 @@ int addToRecordedColors(int r, int g, int b) {
         }
     }
     
+    lastNormR = cr;
+    lastNormG = cg;
+    lastNormB = cb;
 
     return numIndexes;
 }
 
 - (void) translateCode {
     NSString * lookUpTable = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    for (int i = 0; i < numIndexes; i+= 3) {
+        NSLog(@"%i, %i, %i",recordedColors[i], recordedColors[i + 1], recordedColors[i + 2]);
+    }
+
     NSMutableString * b64 = [NSMutableString stringWithString:@""];
-    int canStart = 0;
-    int startPosition = 0;
-    for (int i = 0; i < numIndexes; i++){
-        if (i % 3 == 0 && canStart == 0) {
-            if (recordedColors[i] + recordedColors[i + 1] + recordedColors[i + 2] == 0) {
-                canStart = 1;
-                continue;
-            }
+    int startPosition = -1;
+    for (int i = 0; i < numIndexes; i+=6){
+        if(recordedColors[i] == 0 && recordedColors[i+1]==0 && recordedColors[i+2]==0){
+            startPosition = i+3;
+            break;
         }
+        if(recordedColors[i+3] == 0 && recordedColors[i+4]==0 && recordedColors[i+5]==0){
+            startPosition = i+6;
+            break;
+        }
+    }
+    //yeeO<e?
+    
+    NSLog(@"starting position: %i", startPosition);
+    for (int i= startPosition; i<numIndexes;i+=6){
+        if (recordedColors[i] + recordedColors[i + 1] + recordedColors[i + 2] == 0) {
+            recordedColors[i + 2] = recordedColors[i + 2 - 3];
+            recordedColors[i + 1] = recordedColors[i + 1 - 3];
+            recordedColors[i] = recordedColors[i - 3];
+        }
+
+        if (recordedColors[i + 5] + recordedColors[i + 4] + recordedColors[i + 3] == 0) {
+            recordedColors[i + 5] = recordedColors[i + 5 - 3];
+            recordedColors[i + 4] = recordedColors[i + 4 - 3];
+            recordedColors[i + 3] = recordedColors[i + 3 - 3];
+        }
+
+        int num = (recordedColors[i + 5] == 138 ? 0 : 1);
+        num += 2 * (recordedColors[i + 4] == 138 ? 0 : 1);
+        num += 2 * 2 * (recordedColors[i + 3] == 138 ? 0 : 1);
+
+        num += 2 * 2 * 2 * (recordedColors[i + 2] == 138 ? 0 : 1);
+        num += 2 * 2 * 2 * 2 * (recordedColors[i + 1] == 138 ? 0 : 1);
+        num += 2 * 2 * 2 * 2 * 2 * (recordedColors[i ] == 138 ? 0 : 1);
         
-        if (i % 3 == 0 && canStart == 1 && recordedColors[i] + recordedColors[i + 1] + recordedColors[i + 2] != 0) {
-            canStart = 2;
-            startPosition = i;
-        } else {
-            if (i % 3 == 0) {
-                canStart = 0;
-            }
-        }
-
-        if (canStart == 2) {
-            if (i - startPosition % 6 == 0) {
-                int num = (recordedColors[i] == 138 ? 0 : 1);
-                num += 2 * (recordedColors[i + 1] == 138 ? 0 : 1);
-                num += 2 * 2 * (recordedColors[i + 2] == 138 ? 0 : 1);
-                num += 2 * 2 * 2 * (recordedColors[i + 2] == 138 ? 0 : 1);
-                num += 2 * 2 * 2 * 2 * (recordedColors[i + 2] == 138 ? 0 : 1);
-                num += 2 * 2 * 2 * 2 * 2 * (recordedColors[i + 2] == 138 ? 0 : 1);
-                NSLog(@"%i", num);
-                
-                NSString * character = [lookUpTable substringWithRange:NSMakeRange(num, 1)];
-                [b64 appendString:character];
-            }
-        }
+        NSString * character = [lookUpTable substringWithRange:NSMakeRange(num, 1)];
+        [b64 appendString:character];
     }
-
-    for (int i = 0; i < numIndexes; i++) {
-        if (i % 3 == 0) NSLog(@"%i, %i, %i", recordedColors[i], recordedColors[i +1], recordedColors[i + 2]);
+    
+    NSLog(@"%@", b64);
+    NSUInteger spaceLeft = 4-([b64 length] % 4);
+    for(int i =0;i<spaceLeft;i+=1){
+        [b64 appendString:@"="];
     }
-    NSData * data = [b64 dataUsingEncoding:NSUTF8StringEncoding];
-    NSString * finalString = [data base64EncodedStringWithOptions:0];
-    NSLog(@"%@", finalString);
-  
-//    [alert show];
-//    [alert release];
+    NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:b64 options:0];
+    NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
+    NSLog(@"DECODE: %@", decodedString); // foo
 }
+
+
 
 #pragma mark RosyWriterRenderer
 
@@ -194,19 +279,18 @@ int addToRecordedColors(int r, int g, int b) {
     int redAvg = 0;
     int blueAvg = 0;
     int ct = 0;
-    const int rect_space = 25;
 	for ( int row = 0; row < bufferHeight; row++ )
 	{
 		uint8_t * pixel = baseAddress + row * bytesPerRow;
 		for ( int column = 0; column < bufferWidth; column++ )
 		{
       
-            if (abs(row - bufferHeight/2) < rect_space && abs(column - bufferWidth/2) < rect_space) {
+//            if (abs(row - bufferHeight/2) < rect_space && abs(column - bufferWidth/2) < rect_space) {
                 blueAvg += pixel[0]; // De-green (second pixel in BGRA is green)
                 greenAvg += pixel[1]; // De-green (second pixel in BGRA is green)
                 redAvg += pixel[2]; // De-green (second pixel in BGRA is green)
                 ct++;
-            }
+//            }
             
             pixel += kBytesPerPixel;
 		}
@@ -220,6 +304,7 @@ int addToRecordedColors(int r, int g, int b) {
     int q = addToRecordedColors(redAvg, greenAvg, blueAvg);
     if (q == -99) {
         [self translateCode];
+        exit(1);
     }
     
 
