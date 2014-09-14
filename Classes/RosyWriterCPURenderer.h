@@ -51,6 +51,8 @@
 #import "RosyWriterViewController.h"
 @interface RosyWriterCPURenderer : NSObject <RosyWriterRenderer>
 @property(nonatomic, retain) NSString * detectionDone;
+@property(nonatomic, retain) NSString * cachedString;
+
 int addToRecordedColors(int r, int g, int b);
 int defineBit(int n);
 int modVal(int val, int up);

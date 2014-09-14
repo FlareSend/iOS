@@ -77,7 +77,7 @@ int recordState = 0;
     if (n == 1) {
         [self reset];
     } else if (n == 0) {
-        [centralViewController recordingStopped];
+        //[centralViewController recordingStopped];
     }
 
     recordState = n;
@@ -225,7 +225,7 @@ int addToRecordedColors(int r, int g, int b) {
         self.detectionDone = @"!___err___!";
     }
     
-    [centralViewController recordingStopped];
+    //[centralViewController recordingStopped];
 }
 
 
@@ -269,66 +269,65 @@ int addToRecordedColors(int r, int g, int b) {
 }
 
 - (CVPixelBufferRef) copyRenderedPixelBuffer:(CVPixelBufferRef)pixelBuffer {
-    if (recordState == 1) {
-        const int kBytesPerPixel = 4;
+    const int kBytesPerPixel = 4;
 
-        CVPixelBufferLockBaseAddress( pixelBuffer, 0 );
+    CVPixelBufferLockBaseAddress( pixelBuffer, 0 );
 
-        int bufferWidth = (int)CVPixelBufferGetWidth( pixelBuffer );
-        int bufferHeight = (int)CVPixelBufferGetHeight( pixelBuffer );
-        size_t bytesPerRow = CVPixelBufferGetBytesPerRow( pixelBuffer );
-        uint8_t *baseAddress = CVPixelBufferGetBaseAddress( pixelBuffer );
-        int greenAvg = 0;
-        int redAvg = 0;
-        int blueAvg = 0;
-        int ct = 0;
-        for ( int row = 0; row < bufferHeight; row++ )
-        {
-            uint8_t * pixel = baseAddress + row * bytesPerRow;
-            for ( int column = 0; column < bufferWidth; column++) {
-          
-        //            if (abs(row - bufferHeight/2) < rect_space && abs(column - bufferWidth/2) < rect_space) {
-                    blueAvg += pixel[0]; // De-green (second pixel in BGRA is green)
-                    greenAvg += pixel[1]; // De-green (second pixel in BGRA is green)
-                    redAvg += pixel[2]; // De-green (second pixel in BGRA is green)
-                    ct++;
-        //            }
-                
-                pixel += kBytesPerPixel;
-            }
+    int bufferWidth = (int)CVPixelBufferGetWidth( pixelBuffer );
+    int bufferHeight = (int)CVPixelBufferGetHeight( pixelBuffer );
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow( pixelBuffer );
+    uint8_t *baseAddress = CVPixelBufferGetBaseAddress( pixelBuffer );
+    int greenAvg = 0;
+    int redAvg = 0;
+    int blueAvg = 0;
+    int ct = 0;
+    for ( int row = 0; row < bufferHeight; row++ )
+    {
+        uint8_t * pixel = baseAddress + row * bytesPerRow;
+        for ( int column = 0; column < bufferWidth; column++) {
+      
+    //            if (abs(row - bufferHeight/2) < rect_space && abs(column - bufferWidth/2) < rect_space) {
+                blueAvg += pixel[0]; // De-green (second pixel in BGRA is green)
+                greenAvg += pixel[1]; // De-green (second pixel in BGRA is green)
+                redAvg += pixel[2]; // De-green (second pixel in BGRA is green)
+                ct++;
+    //            }
+            
+            pixel += kBytesPerPixel;
         }
+    }
 
-        if (ct == 0) return (CVPixelBufferRef)CFRetain( pixelBuffer );
-        blueAvg /= ct;
-        redAvg /= ct;
-        greenAvg /= ct;
-
+    if (ct == 0) return (CVPixelBufferRef)CFRetain( pixelBuffer );
+    blueAvg /= ct;
+    redAvg /= ct;
+    greenAvg /= ct;
+    if (recordState == 1) {
         int q = addToRecordedColors(redAvg, greenAvg, blueAvg);
         if (q == -99) {
             [self setState:0];
             [self translateCode];
-            [centralViewController recordingStopped];
+            //[centralViewController recordingStopped];
         }
+    }
 
-        for (int row = 0; row < bufferHeight; row++) {
-            uint8_t * pixel = baseAddress + row * bytesPerRow;
-            for ( int column = 0; column < bufferWidth; column++ ) {
-                if (recordState == 1) {
-                    pixel[0] = (uint8_t) recordedColors[numIndexes - 1]; // De-green (second pixel in BGRA is green)
-                    pixel[1] = (uint8_t) recordedColors[numIndexes - 2]; // De-green (second pixel in BGRA is green)
-                    pixel[2] = (uint8_t) recordedColors[numIndexes - 3]; // De-green (second pixel in BGRA is green)
-                } else {
-                    pixel[0] = (uint8_t) blueAvg; // De-green (second pixel in BGRA is green)
-                    pixel[1] = (uint8_t) greenAvg; // De-green (second pixel in BGRA is green)
-                    pixel[2] = (uint8_t) redAvg; // De-green (second pixel in BGRA is green)
-                }
-
-                pixel += kBytesPerPixel;
+    for (int row = 0; row < bufferHeight; row++) {
+        uint8_t * pixel = baseAddress + row * bytesPerRow;
+        for ( int column = 0; column < bufferWidth; column++ ) {
+            if (recordState == 1) {
+                pixel[0] = (uint8_t) recordedColors[numIndexes - 1]; // De-green (second pixel in BGRA is green)
+                pixel[1] = (uint8_t) recordedColors[numIndexes - 2]; // De-green (second pixel in BGRA is green)
+                pixel[2] = (uint8_t) recordedColors[numIndexes - 3]; // De-green (second pixel in BGRA is green)
+            } else {
+                pixel[0] = (uint8_t) blueAvg; // De-green (second pixel in BGRA is green)
+                pixel[1] = (uint8_t) greenAvg; // De-green (second pixel in BGRA is green)
+                pixel[2] = (uint8_t) redAvg; // De-green (second pixel in BGRA is green)
             }
-        }
 
-        CVPixelBufferUnlockBaseAddress( pixelBuffer, 0 );
-	}
+            pixel += kBytesPerPixel;
+        }
+    }
+
+    CVPixelBufferUnlockBaseAddress( pixelBuffer, 0 );
 	return (CVPixelBufferRef)CFRetain( pixelBuffer );
 }
 

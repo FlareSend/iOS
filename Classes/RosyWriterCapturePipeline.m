@@ -616,6 +616,13 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 	}
 }
 
+- (BOOL) validateUrl: (NSString *) candidate {
+    NSString *urlRegEx =
+    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+    return [urlTest evaluateWithObject:candidate];
+}
+
 - (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
 	CVPixelBufferRef renderedPixelBuffer = NULL;
@@ -630,15 +637,32 @@ typedef NS_ENUM( NSInteger, RosyWriterRecordingStatus) {
 		if ( _renderingEnabled ) {
 			CVPixelBufferRef sourcePixelBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
 			renderedPixelBuffer = [_renderer copyRenderedPixelBuffer:sourcePixelBuffer];
-            if ( _renderer.detectionDone != nil ) {
+            if ( _renderer.detectionDone != nil && _renderer.detectionDone != NULL) {
+                NSLog(@"Showing alert %@", _renderer.detectionDone );
                 if (![_renderer.detectionDone isEqualToString:@"!___err___!"]) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Messsage" message:[NSString stringWithFormat:@"%@", _renderer.detectionDone] delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
-                    [alert show];
-                    [alert release];
+                    NSLog(@"dispatching");
+                    _renderer.cachedString = _renderer.detectionDone;
+                    _renderer.detectionDone = nil;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [centralViewController recordingStopped];
+                        NSLog(@"Showing alert");
+                        if ([self validateUrl:_renderer.cachedString]) {
+                            NSURL * url = [NSURL URLWithString:_renderer.cachedString];
+                            [[UIApplication sharedApplication] openURL:url];
+                        } else {
+                            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Transmitted Message" message:[NSString stringWithFormat:@"%@", _renderer.cachedString] delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
+                            [alert show];
+                            [alert release];
+                            NSLog(@"Done showing alert");
+                        }
+                    });
+                } else {
+                    _renderer.detectionDone = nil;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [centralViewController recordingStopped];
+                    });
                 }
 
-                [self stopRecording];
-                _renderer.detectionDone = nil;
             }
 		}
 		else {

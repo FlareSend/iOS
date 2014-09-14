@@ -203,7 +203,6 @@
 }
 
 - (void) recordingStopped {
-    
 	_recording = NO;
 	[[self recordButton] setEnabled:YES];
 	[[self recordButton] setTitle:@"Begin capture"];
