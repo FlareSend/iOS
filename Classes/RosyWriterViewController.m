@@ -67,9 +67,20 @@
 @property(nonatomic, retain) OpenGLPixelBufferView *previewView;
 @property(nonatomic, retain) RosyWriterCapturePipeline *capturePipeline;
 @property(nonatomic, retain) UIView * transmitter;
+@property(nonatomic, retain) UIButton * btn;
+@property(nonatomic, retain) UIButton * mainMenuBtn;
+@property(nonatomic, retain) UIView * menu;
+@property(nonatomic, retain) UIButton * sendBtn;
+@property(nonatomic, retain) UIButton * receiveBtn;
+@property(nonatomic, retain) UIButton * mainMenuRecvrBtn;
 @end
 
-@implementation RosyWriterViewController
+@implementation RosyWriterViewController {
+    NSArray * colorsToDisplay;
+    int currentColorIndex;
+    int fps;
+    int transmitState;
+}
 
 
 - (void)dealloc
@@ -113,6 +124,8 @@
 
 - (void)viewDidLoad
 {
+    currentColorIndex = -1;
+    colorsToDisplay = nil;
     self.capturePipeline = [[[RosyWriterCapturePipeline alloc] initWithViewController:self] autorelease];
     [self.capturePipeline setDelegate:self callbackQueue:dispatch_get_main_queue()];
 	
@@ -141,19 +154,278 @@
     [super viewDidLoad];
 }
 
+- (void) receiveBtnPressed:(id) sender {
+    [self showReceiver];
+}
+
+- (void) sendBtnPressed:(id) sender {
+    [self showTransmitter];
+    [self.transmitter setHidden:NO];
+    [self.view bringSubviewToFront:self.transmitter];
+}
+
+- (void) showReceiver {
+    [self.mainMenuRecvrBtn setHidden:NO];
+    [self.menu setHidden:YES];
+    [self.transmitter setHidden:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
+    fps = -1;
+    transmitState = -1;
+    
 	[super viewWillAppear:animated];
-//    self.transmitter = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    [self.view addSubview:self.transmitter];
-//    [self.view bringSubviewToFront:self.transmitter];
-//    [self.transmitter setBackgroundColor:[UIColor colorWithRed:.4 green:.5 blue:.1 alpha:1]];
+    self.transmitter = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.menu = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    int height = [UIScreen mainScreen].bounds.size.height;
+    UILabel * title = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 105, height/2 - 150, 300, 90)];
+    [title setFont:[UIFont fontWithName:@"Helvetica" size:95.0f]];
+    [title setText:@"Flare"];
+    const int width = 100;
+    
+    self.sendBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 130/2, height/2 - 40, 130, 60)];
+    self.sendBtn.layer.cornerRadius = 4;
+    self.sendBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:30.0f];
+    self.sendBtn.layer.borderColor = [[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0] CGColor];
+    self.sendBtn.layer.borderWidth = 1;
+    self.sendBtn.clipsToBounds = YES;
+    [self.sendBtn addTarget:self action:@selector(sendBtnPressed:) forControlEvents:UIControlEventAllEvents];
+    [self.sendBtn setTitle:@"Send" forState:UIControlStateNormal];
+    [self.menu addSubview:self.sendBtn];
+    
+    self.receiveBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 130/2, height/2 + 40, 130, 60)];
+    self.receiveBtn.layer.cornerRadius = 4;
+    self.receiveBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:30.0f];
+    self.receiveBtn.layer.borderColor = [[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0] CGColor];
+    self.receiveBtn.layer.borderWidth = 1;
+    self.receiveBtn.clipsToBounds = YES;
+    [self.receiveBtn addTarget:self action:@selector(receiveBtnPressed:) forControlEvents:UIControlEventAllEvents];
+    [self.receiveBtn setTitle:@"Receive" forState:UIControlStateNormal];
+    [self.menu addSubview:self.receiveBtn];
+
+    [self.menu setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1]];
+    [self.view addSubview:self.menu];
+    [self.view bringSubviewToFront:self.menu];
+    [self.menu addSubview:title];
+    [title setTextColor:[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0]];
+    
+
+    self.mainMenuBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - width/2, [UIScreen mainScreen].bounds.size.height - 45, width, 30)];
+    self.mainMenuBtn.layer.cornerRadius = 4;
+    self.mainMenuBtn.layer.borderColor = [[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0] CGColor];
+    self.mainMenuBtn.layer.borderWidth = 1;
+    self.mainMenuBtn.clipsToBounds = YES;
+
+    [self.mainMenuBtn addTarget:self action:@selector(menuBtnPressed:) forControlEvents:UIControlEventAllEvents];
+    [self.mainMenuBtn setTitle:@"Home" forState:UIControlStateNormal];
+    [self.transmitter addSubview:self.mainMenuBtn];
+    //
+    
+    self.mainMenuRecvrBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - width/2, [UIScreen mainScreen].bounds.size.height - 45, width, 30)];
+    self.mainMenuRecvrBtn.layer.cornerRadius = 4;
+    self.mainMenuRecvrBtn.layer.borderColor = [[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0] CGColor];
+    self.mainMenuRecvrBtn.layer.borderWidth = 1;
+    self.mainMenuRecvrBtn.clipsToBounds = YES;
+    [self.mainMenuRecvrBtn setHidden:YES];
+
+    [self.mainMenuRecvrBtn addTarget:self action:@selector(menuBtnPressed:) forControlEvents:UIControlEventAllEvents];
+    [self.mainMenuRecvrBtn setTitle:@"Home" forState:UIControlStateNormal];
+    [self.view addSubview:self.mainMenuRecvrBtn];
+
+    
+    //
+    
+    self.btn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - width/2, [UIScreen mainScreen].bounds.size.height - 90, width, 30)];
+    self.btn.layer.cornerRadius = 4;
+    self.btn.layer.borderColor = [[UIColor colorWithRed:0.9254 green:0.9411 blue:0.9450 alpha:1.0] CGColor];
+    self.btn.layer.borderWidth = 1;
+    self.btn.clipsToBounds = YES;
+
+//    [btn setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1]];
+//    [btn addTarget:self action:@selector(btnPressed)
+    [self.btn addTarget:self action:@selector(btnPressed:) forControlEvents:UIControlEventAllEvents];
+    [self.btn setTitle:@"Set data" forState:UIControlStateNormal];
+    [self.transmitter addSubview:self.btn];
+
+    [self showTransmitter];
+    [self.view addSubview:self.transmitter];
+
 
     [[self recordButton] setTitle:@"Begin capture"];
 	
 	[self.capturePipeline startRunning];
 	
 	self.labelTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateLabels) userInfo:nil repeats:YES];
+    [self.transmitter setHidden:YES];
+}
+
+- (void) btnPressed: (id) sender {
+    
+    if (transmitState == 0) {
+        [((UIButton*) sender) setHidden:YES];
+        transmitState = 1;
+        [((UIButton*) sender) setTitle:@"Set data" forState:UIControlStateNormal];
+    } else if (transmitState == -1) {
+        [((UIButton*) sender) setTitle:@"Transmit" forState:UIControlStateNormal];
+        transmitState = 3;
+        [self showTransmitterAlert];
+    }
+}
+
+- (void) menuBtnPressed: (id) sender {
+    [self.mainMenuRecvrBtn setHidden:YES];
+    [self.transmitter setHidden:YES];
+    [self.menu setHidden:NO];
+}
+
+-(NSString *)toBinary:(NSInteger)input
+{
+    if (input == 1 || input == 0) {
+        return [NSString stringWithFormat:@"%ld", (long)input];
+    }
+    else {
+        return [NSString stringWithFormat:@"%@%ld", [self toBinary:input / 2], input % 2];
+    }
+}
+
+- (void) showTransmitter {
+    [self.view bringSubviewToFront:self.transmitter];
+    [self.transmitter setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1]];
+}
+
+- (void) showTransmitterAlert {
+    if (transmitState == -1 || transmitState == 3) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Transmitter" message:@"Enter a string" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert show];
+        [alert release];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (!self.transmitter.isHidden) {
+        NSString * text = [alertView textFieldAtIndex:0].text;
+        const int fFPS = 15;
+        fps = fFPS;
+        transmitState = 0;
+        NSArray * arr = [self makeSequence:text];
+        [self setTransmitterAnimation:fFPS withSequence:arr];
+    }
+}
+
+- (NSArray *) makeSequence:(NSString *) str {
+    NSString * base64Table = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    NSData * data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    NSString * base64Encoded = [data base64EncodedStringWithOptions:0];
+    NSMutableArray * nums = [[NSMutableArray alloc] init];
+    
+    while ([[base64Encoded substringWithRange:NSMakeRange(base64Encoded.length - 1, 1)] isEqualToString:@"="]) {
+        base64Encoded = [base64Encoded substringWithRange:NSMakeRange(0, base64Encoded.length - 1)];
+    }
+    
+    for (int i = 0; i < base64Encoded.length; i++) {
+        NSString * indChar = [base64Encoded substringWithRange:NSMakeRange(i, 1)];
+        NSInteger loc = [base64Table rangeOfString:indChar].location;
+        NSString * strLoc = [self toBinary:loc];
+        if (strLoc.length > 6) {
+            strLoc = [strLoc substringWithRange:NSMakeRange(0, 6)];
+        } else if (strLoc.length < 6) {
+            while (strLoc.length < 6) {
+                strLoc = [NSString stringWithFormat:@"0%@", strLoc];
+            }
+        }
+        
+        const int minVal = 138;
+        const int maxVal = 255;
+
+        NSNumber * r1 = [NSNumber numberWithInt:[[strLoc substringWithRange:NSMakeRange(0, 1)] intValue] == 0 ? minVal : maxVal];
+        NSNumber * g1 = [NSNumber numberWithInt:[[strLoc substringWithRange:NSMakeRange(1, 1)] intValue] == 0 ? minVal : maxVal];
+        NSNumber * b1 = [NSNumber numberWithInt:[[strLoc substringWithRange:NSMakeRange(2, 1)] intValue] == 0 ? minVal : maxVal];
+        NSNumber * r2 = [NSNumber numberWithInt:[[strLoc substringWithRange:NSMakeRange(3, 1)] intValue] == 0 ? minVal : maxVal];
+        NSNumber * g2 = [NSNumber numberWithInt:[[strLoc substringWithRange:NSMakeRange(4, 1)] intValue] == 0 ? minVal : maxVal];
+        NSNumber * b2 = [NSNumber numberWithInt:[[strLoc substringWithRange:NSMakeRange(5, 1)] intValue] == 0 ? minVal : maxVal];
+        
+        [nums addObject:r1];
+        [nums addObject:g1];
+        [nums addObject:b1];
+        [nums addObject:r2];
+        [nums addObject:g2];
+        [nums addObject:b2];
+    }
+    
+    for (int i = 3; i < nums.count; i += 3) {
+        if (i % 3 == 0) {
+            if ([nums[i] intValue] == [nums[i - 3] intValue] && [nums[i + 1] intValue] == [nums[i - 3 + 1] intValue] && [nums[i + 2] intValue] == [nums[i - 3 + 2] intValue]) {
+                nums[i] = [NSNumber numberWithInt:0];
+                nums[i + 1] = [NSNumber numberWithInt:0];
+                nums[i + 2] = [NSNumber numberWithInt:0];
+            }
+        }
+    }
+
+    NSNumber * lastR = nums[nums.count - 3];
+    NSNumber * lastG = nums[nums.count - 2];
+    NSNumber * lastB = nums[nums.count - 1];
+    
+    for (int i = 0; i < 1 * fps; i++) {
+        [nums addObject:lastR];
+        [nums addObject:lastG];
+        [nums addObject:lastB];
+    }
+    
+    [nums insertObject:[NSNumber numberWithInt:0] atIndex:0];
+    [nums insertObject:[NSNumber numberWithInt:0] atIndex:0];
+    [nums insertObject:[NSNumber numberWithInt:0] atIndex:0];
+    return nums;
+}
+
+- (void) setTransmitterAnimation:(int) fps_ withSequence:(NSArray *) sequence {
+    [[self capturePipeline] stopRecording];
+    fps = fps_;
+    colorsToDisplay = sequence;
+    [NSTimer scheduledTimerWithTimeInterval:1.0/fps
+                                     target:self
+                                   selector:@selector(updateTransmitter:)
+                                   userInfo:nil
+                                    repeats:NO];
+}
+
+- (void) updateTransmitter:(id) sender {
+    if (currentColorIndex == -1) {
+        currentColorIndex = 0;
+    }
+    if (transmitState == 1) {
+        self.transmitter.backgroundColor = [UIColor
+            colorWithRed:[[colorsToDisplay objectAtIndex:currentColorIndex] intValue]/255.0
+            green:[[colorsToDisplay objectAtIndex:currentColorIndex + 1] intValue]/255.0
+            blue:[[colorsToDisplay objectAtIndex:currentColorIndex + 2] intValue]/255.0
+            alpha:1];
+
+        NSLog(@"%f, %f, %f",[[colorsToDisplay objectAtIndex:currentColorIndex] intValue]/255.0, [[colorsToDisplay objectAtIndex:currentColorIndex + 1] intValue]/255.0,[[colorsToDisplay objectAtIndex:currentColorIndex + 2] intValue]/255.0);
+        currentColorIndex += 3;
+    }
+    if (currentColorIndex <= colorsToDisplay.count - 3) {
+        [NSTimer scheduledTimerWithTimeInterval:(1.0/fps)
+                                         target:self
+                                       selector:@selector(updateTransmitter:)
+                                       userInfo:nil
+                                        repeats:NO];
+    } else if (transmitState == 1) {
+        self.transmitter.backgroundColor = [UIColor
+                                            colorWithRed:0
+                                            green:0
+                                            blue:0
+                                            alpha:1];
+        [self.btn setHidden:NO];
+        transmitState = -1;
+        currentColorIndex = -1;
+    }
+}
+
+- (void) hideTransmitter {
+    fps = -1;
+    [[self capturePipeline] startRecording];
 }
 
 - (void) buttonClicked:(id) btn {
