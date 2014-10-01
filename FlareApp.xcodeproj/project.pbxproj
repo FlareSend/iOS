@@ -64,7 +64,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1FCCE66D19BA80A5009D7A6B /* RosyWriterCPU.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RosyWriterCPU.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FCCE66D19BA80A5009D7A6B /* FlareAppCPU.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlareAppCPU.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		262F9EB519A7CA8D001BB393 /* myFilter.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = myFilter.fsh; path = Resources/Shaders/myFilter.fsh; sourceTree = SOURCE_ROOT; };
 		262F9EB619A7CA8D001BB393 /* myFilter.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = myFilter.vsh; path = Resources/Shaders/myFilter.vsh; sourceTree = SOURCE_ROOT; };
 		269351C0156CB42100512474 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -74,14 +74,14 @@
 		5DC09BEE19B7F5100025A16E /* RosyWriterCPURenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RosyWriterCPURenderer.h; sourceTree = "<group>"; };
 		5DC09BEF19B7F5100025A16E /* RosyWriterCPURenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RosyWriterCPURenderer.m; sourceTree = "<group>"; };
 		6F096BF9157ED5110075E328 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		6F90DDD51395CAAA00125BDA /* RosyWriter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RosyWriter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F90DDD51395CAAA00125BDA /* FlareApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlareApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F90DDD91395CAAA00125BDA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6F90DDDB1395CAAA00125BDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6F90DDDD1395CAAA00125BDA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		6F90DDE11395CAAA00125BDA /* RosyWriter-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "RosyWriter-Info.plist"; path = "../RosyWriter-Info.plist"; sourceTree = "<group>"; };
+		6F90DDE11395CAAA00125BDA /* FlareApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "FlareApp-Info.plist"; path = "../FlareApp-Info.plist"; sourceTree = "<group>"; };
 		6F90DDE31395CAAA00125BDA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6F90DDE51395CAAA00125BDA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../main.m; sourceTree = "<group>"; };
-		6F90DDE71395CAAA00125BDA /* RosyWriter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "RosyWriter-Prefix.pch"; path = "../RosyWriter-Prefix.pch"; sourceTree = "<group>"; };
+		6F90DDE71395CAAA00125BDA /* FlareApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "FlareApp-Prefix.pch"; path = "../FlareApp-Prefix.pch"; sourceTree = "<group>"; };
 		6F90DDE81395CAAA00125BDA /* RosyWriterAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RosyWriterAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		6F90DDE91395CAAA00125BDA /* RosyWriterAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RosyWriterAppDelegate.m; sourceTree = "<group>"; };
 		6F90DDEB1395CAAA00125BDA /* RosyWriterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RosyWriterViewController.h; sourceTree = "<group>"; };
@@ -180,8 +180,8 @@
 		6F90DDD61395CAAA00125BDA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6F90DDD51395CAAA00125BDA /* RosyWriter.app */,
-				1FCCE66D19BA80A5009D7A6B /* RosyWriterCPU.app */,
+				6F90DDD51395CAAA00125BDA /* FlareApp.app */,
+				1FCCE66D19BA80A5009D7A6B /* FlareAppCPU.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -224,7 +224,7 @@
 				7214DBCD182AEF8900EA3F99 /* Images.xcassets */,
 				281FB47D176694640071511D /* Main.storyboard */,
 				262D247E17177837000E1DBA /* Shaders */,
-				6F90DDE11395CAAA00125BDA /* RosyWriter-Info.plist */,
+				6F90DDE11395CAAA00125BDA /* FlareApp-Info.plist */,
 				6F90DDE21395CAAA00125BDA /* InfoPlist.strings */,
 			);
 			name = Resources;
@@ -259,7 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				6F90DDE51395CAAA00125BDA /* main.m */,
-				6F90DDE71395CAAA00125BDA /* RosyWriter-Prefix.pch */,
+				6F90DDE71395CAAA00125BDA /* FlareApp-Prefix.pch */,
 			);
 			name = "Other Sources";
 			path = Classes;
@@ -268,9 +268,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1FCCE64619BA80A5009D7A6B /* RosyWriterCPU */ = {
+		1FCCE64619BA80A5009D7A6B /* FlareAppCPU */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1FCCE66A19BA80A5009D7A6B /* Build configuration list for PBXNativeTarget "RosyWriterCPU" */;
+			buildConfigurationList = 1FCCE66A19BA80A5009D7A6B /* Build configuration list for PBXNativeTarget "FlareAppCPU" */;
 			buildPhases = (
 				1FCCE64719BA80A5009D7A6B /* Sources */,
 				1FCCE65319BA80A5009D7A6B /* Frameworks */,
@@ -280,14 +280,14 @@
 			);
 			dependencies = (
 			);
-			name = RosyWriterCPU;
+			name = FlareAppCPU;
 			productName = RosyWriter;
-			productReference = 1FCCE66D19BA80A5009D7A6B /* RosyWriterCPU.app */;
+			productReference = 1FCCE66D19BA80A5009D7A6B /* FlareAppCPU.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6F90DDD41395CAAA00125BDA /* RosyWriter */ = {
+		6F90DDD41395CAAA00125BDA /* FlareApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6F90DDF71395CAAA00125BDA /* Build configuration list for PBXNativeTarget "RosyWriter" */;
+			buildConfigurationList = 6F90DDF71395CAAA00125BDA /* Build configuration list for PBXNativeTarget "FlareApp" */;
 			buildPhases = (
 				6F90DDD11395CAAA00125BDA /* Sources */,
 				6F90DDD21395CAAA00125BDA /* Frameworks */,
@@ -297,9 +297,9 @@
 			);
 			dependencies = (
 			);
-			name = RosyWriter;
+			name = FlareApp;
 			productName = RosyWriter;
-			productReference = 6F90DDD51395CAAA00125BDA /* RosyWriter.app */;
+			productReference = 6F90DDD51395CAAA00125BDA /* FlareApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -309,8 +309,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0600;
+				TargetAttributes = {
+					6F90DDD41395CAAA00125BDA = {
+						DevelopmentTeam = 2ZBX399TG9;
+					};
+				};
 			};
-			buildConfigurationList = 6F90DDCF1395CAAA00125BDA /* Build configuration list for PBXProject "RosyWriter" */;
+			buildConfigurationList = 6F90DDCF1395CAAA00125BDA /* Build configuration list for PBXProject "FlareApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -322,8 +327,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6F90DDD41395CAAA00125BDA /* RosyWriter */,
-				1FCCE64619BA80A5009D7A6B /* RosyWriterCPU */,
+				6F90DDD41395CAAA00125BDA /* FlareApp */,
+				1FCCE64619BA80A5009D7A6B /* FlareAppCPU */,
 			);
 		};
 /* End PBXProject section */
@@ -424,10 +429,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RosyWriter-Prefix.pch";
-				INFOPLIST_FILE = "RosyWriter-Info.plist";
+				INFOPLIST_FILE = "FlareApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DUSE_GPU_RENDERER=0";
-				PRODUCT_NAME = RosyWriterCPU;
+				PRODUCT_NAME = FlareAppCPU;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -443,10 +448,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RosyWriter-Prefix.pch";
-				INFOPLIST_FILE = "RosyWriter-Info.plist";
+				INFOPLIST_FILE = "FlareApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DUSE_GPU_RENDERER=0";
-				PRODUCT_NAME = RosyWriterCPU;
+				PRODUCT_NAME = FlareAppCPU;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -465,7 +470,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Logan Engstrom (2ZBX399TG9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -485,9 +490,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10b6eb98-51ef-4f66-9d95-ba6e0865155a";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
@@ -507,7 +512,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Logan Engstrom (2ZBX399TG9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -520,9 +525,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10b6eb98-51ef-4f66-9d95-ba6e0865155a";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
@@ -536,15 +541,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Logan Engstrom (2ZBX399TG9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RosyWriter-Prefix.pch";
-				INFOPLIST_FILE = "RosyWriter-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				GCC_PREFIX_HEADER = "FlareApp-Prefix.pch";
+				INFOPLIST_FILE = "FlareApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DUSE_GPU_RENDERER=1";
-				PRODUCT_NAME = RosyWriter;
-				PROVISIONING_PROFILE = "";
+				PRODUCT_NAME = FlareApp;
+				PROVISIONING_PROFILE = "10b6eb98-51ef-4f66-9d95-ba6e0865155a";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -555,15 +560,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Logan Engstrom (2ZBX399TG9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RosyWriter-Prefix.pch";
-				INFOPLIST_FILE = "RosyWriter-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				GCC_PREFIX_HEADER = "FlareApp-Prefix.pch";
+				INFOPLIST_FILE = "FlareApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DUSE_GPU_RENDERER=1";
-				PRODUCT_NAME = RosyWriter;
-				PROVISIONING_PROFILE = "";
+				PRODUCT_NAME = FlareApp;
+				PROVISIONING_PROFILE = "10b6eb98-51ef-4f66-9d95-ba6e0865155a";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -572,7 +577,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1FCCE66A19BA80A5009D7A6B /* Build configuration list for PBXNativeTarget "RosyWriterCPU" */ = {
+		1FCCE66A19BA80A5009D7A6B /* Build configuration list for PBXNativeTarget "FlareAppCPU" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1FCCE66B19BA80A5009D7A6B /* Debug */,
@@ -581,7 +586,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6F90DDCF1395CAAA00125BDA /* Build configuration list for PBXProject "RosyWriter" */ = {
+		6F90DDCF1395CAAA00125BDA /* Build configuration list for PBXProject "FlareApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F90DDF51395CAAA00125BDA /* Debug */,
@@ -590,7 +595,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6F90DDF71395CAAA00125BDA /* Build configuration list for PBXNativeTarget "RosyWriter" */ = {
+		6F90DDF71395CAAA00125BDA /* Build configuration list for PBXNativeTarget "FlareApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F90DDF81395CAAA00125BDA /* Debug */,

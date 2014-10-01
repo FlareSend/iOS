@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6F90DDD41395CAAA00125BDA"
-               BuildableName = "RosyWriter.app"
-               BlueprintName = "RosyWriter"
-               ReferencedContainer = "container:RosyWriter.xcodeproj">
+               BlueprintIdentifier = "1FCCE64619BA80A5009D7A6B"
+               BuildableName = "FlareAppCPU.app"
+               BlueprintName = "FlareAppCPU"
+               ReferencedContainer = "container:FlareApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6F90DDD41395CAAA00125BDA"
-            BuildableName = "RosyWriter.app"
-            BlueprintName = "RosyWriter"
-            ReferencedContainer = "container:RosyWriter.xcodeproj">
+            BlueprintIdentifier = "1FCCE64619BA80A5009D7A6B"
+            BuildableName = "FlareAppCPU.app"
+            BlueprintName = "FlareAppCPU"
+            ReferencedContainer = "container:FlareApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,10 +51,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6F90DDD41395CAAA00125BDA"
-            BuildableName = "RosyWriter.app"
-            BlueprintName = "RosyWriter"
-            ReferencedContainer = "container:RosyWriter.xcodeproj">
+            BlueprintIdentifier = "1FCCE64619BA80A5009D7A6B"
+            BuildableName = "FlareAppCPU.app"
+            BlueprintName = "FlareAppCPU"
+            ReferencedContainer = "container:FlareApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,10 +69,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6F90DDD41395CAAA00125BDA"
-            BuildableName = "RosyWriter.app"
-            BlueprintName = "RosyWriter"
-            ReferencedContainer = "container:RosyWriter.xcodeproj">
+            BlueprintIdentifier = "1FCCE64619BA80A5009D7A6B"
+            BuildableName = "FlareAppCPU.app"
+            BlueprintName = "FlareAppCPU"
+            ReferencedContainer = "container:FlareApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

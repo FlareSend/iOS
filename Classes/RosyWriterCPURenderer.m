@@ -99,7 +99,6 @@ int modVal(val, up) {
 
 //best in class function:
 int addToRecordedColors(int r, int g, int b) {
-    NSLog(@"%i", b);
     int cr = defineBit(r);
     int cg = defineBit(g);
     int cb = defineBit(b);
@@ -193,8 +192,6 @@ int addToRecordedColors(int r, int g, int b) {
     NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:b64 options:0];
     NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
 
- 
-    NSLog(@"DECODE: %@", decodedString); // foo
 //    if (![decodedString isEqualToString:@""] || decodedString == nil || decodedString == NULL) {
 //        self.detectionDone = [NSString stringWithFormat:@"%@", decodedString];
 //    } else {
